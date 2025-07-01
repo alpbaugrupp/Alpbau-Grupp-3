@@ -1,43 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="refresh" content="5;url=https://api.whatsapp.com/send/?phone=37255598956&text=Hello.+Share+the+catalog+with+prices+please">
-  <title>Redirecting to WhatsApp...</title>
-  <style>
-    body {
-      background-color: #f4f4f4;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      color: #333;
-    }
-
-    .container {
-      text-align: center;
-    }
-
-    img {
-      width: 80px;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 16px;
-    }
-  </style>
-
-  <!-- Facebook Pixel -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirect to WhatsApp</title>
   <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -48,46 +14,33 @@
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1101075181087203');
+    fbq('track', 'PageView');
+    // Событие 'Lead' теперь будет вызвано непосредственно перед редиректом
+    // в блоке скрипта ниже.
   </script>
-  <!-- End Facebook Pixel -->
-</head>
-<body>
-  <div class="container">
-    <img src="https://static.xx.fbcdn.net/images/whatsapp-logo.png" alt="WhatsApp" />
-    <h1>Redirecting to WhatsApp...</h1>
-    <p>Please wait a moment while we redirect you to WhatsApp.</p>
-  </div>
-
-  <script>
-    const fbclid = new URLSearchParams(window.location.search).get('fbclid');
-    if (fbclid) localStorage.setItem('fbclid', fbclid);
-    const userAgent = navigator.userAgent;
-    const timestamp = Date.now();
-
-    // Отправляем данные на сервер
-    fetch('https://alpbaugrupp.infinityfreeapp.com/store-lead.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fbclid, userAgent, timestamp })
-    });
-
-    // Через 2 секунды — отправка события в Pixel
-    setTimeout(function () {
-      fbq('trackCustom', 'WhatsappClick', {
-        content_name: 'Alpbau Grupp Landing Page',
-        content_category: 'Whatsapp Redirect'
-      });
-
-      // Через ещё 0.5 секунды — редирект на WhatsApp
-      setTimeout(function () {
-        window.location.href = "https://api.whatsapp.com/send/?phone=37255598956&text=Hello.+Share+the+catalog+with+prices+please";
-      }, 500);
-    }, 2000);
-  </script>
-
   <noscript>
     <img height="1" width="1" style="display:none" 
-    src="https://www.facebook.com/tr?id=1101075181087203&ev=PageView&noscript=1"/>
+             src="https://www.facebook.com/tr?id=1101075181087203&ev=PageView&noscript=1"/>
   </noscript>
+</head>
+<body style="margin: 0; padding: 0; background-color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+  <img src="https://raw.githubusercontent.com/alpbaugrupp/Alpbau-Grupp-2/main/Alpbau%20Logo.png" alt="Alpbau Grupp Logo" style="max-width: 200px; margin-bottom: 20px;">
+  <h1 style="color: black; font-family: Arial, sans-serif; margin-bottom: 10px;">Alpbau Grupp</h1>
+  <p style="color: black; font-family: Arial, sans-serif;">Redirecting to Whatsapp...</p>
+  <script>
+    setTimeout(function() {
+      // Вызываем событие 'Lead' здесь, перед редиректом
+      fbq('track', 'Lead', {
+        content_name: 'Alpbau Grupp Landing Page',
+        content_category: 'Whatsapp Redirect', // Изменил категорию для большей специфичности
+        content_type: 'whatsapp_click' // Изменил тип для большей специфичности
+      });
+      
+      // Небольшая задержка перед редиректом, чтобы пиксель успел отправиться
+      setTimeout(function() {
+        window.location.href = "https://wa.me/37255598956?text=Hello.%20Share%20the%20catalog%20with%20prices%20please";
+      }, 500); // Добавил небольшую задержку в 500 мс для отправки события
+    }, 2000); // Основная задержка 2 секунды перед началом процесса редиректа
+  </script>
 </body>
 </html>
