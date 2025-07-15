@@ -32,32 +32,40 @@
   <p style="color: black; font-family: Arial, sans-serif;">Redirecting to Whatsapp...</p>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const fbclid = params.get('fbclid') || '';
-    const utm_source = params.get('utm_source') || '';
-    const utm_campaign = params.get('utm_campaign') || '';
-    const userAgent = navigator.userAgent;
-    const timestamp = Date.now();
-    const phone = '+37255598956';
-
-    // Генерация FBC и FBP
-    const fbc = fbclid ? `fb.1.${Math.floor(timestamp / 1000)}.${fbclid}` : '';
-    const fbp = getCookie('_fbp') || '';
-
+    // Вспомогательная функция для куков
     function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
       if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
+    // Сбор данных
+    const params = new URLSearchParams(window.location.search);
+    const fbclid = params.get('fbclid') || '';
+    const utm_source = params.get('utm_source') || '';
+    const utm_campaign = params.get('utm_campaign') || '';
+    const userAgent = navigator.userAgent;
+    const timestamp = Date.now();
+
+    const fbc = fbclid ? `fb.1.${Math.floor(timestamp / 1000)}.${fbclid}` : '';
+    const fbp = getCookie('_fbp') || '';
+
     // Отправляем на сервер
     fetch('https://cn13572.tw1.ru/store-lead.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fbclid, utm_source, utm_campaign, userAgent, fbc, fbp, timestamp, phone })
+      body: JSON.stringify({
+        fbclid,
+        utm_source,
+        utm_campaign,
+        userAgent,
+        fbc,
+        fbp,
+        timestamp
+      })
     });
 
-    // Запускаем событие и редирект
+    // Отправка события и редирект
     setTimeout(() => {
       fbq('track', 'Lead', {
         content_name: 'Alpbau Grupp Landing Page',
