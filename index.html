@@ -3,20 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Redirect to WhatsApp</title>
+  <title>Redirecting to WhatsApp...</title>
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+    .container { text-align: center; }
+    img { width: 80px; margin-bottom: 20px; }
+    h1 { font-size: 24px; margin-bottom: 10px; }
+    p { font-size: 16px; }
+  </style>
 
   <!-- Facebook Pixel -->
   <script>
-    !function(f,b,e,v,n,t,s){
-      if(f.fbq)return;n=f.fbq=function(){
-        n.callMethod? n.callMethod.apply(n,arguments) : n.queue.push(arguments)
-      };
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)
-    }(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js');
-    
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1101075181087203');
     fbq('track', 'PageView');
   </script>
@@ -25,47 +40,27 @@
          src="https://www.facebook.com/tr?id=1101075181087203&ev=PageView&noscript=1"/>
   </noscript>
 </head>
-
-<body style="margin: 0; padding: 0; background-color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
-  <img src="https://raw.githubusercontent.com/alpbaugrupp/Alpbau-Grupp-2/main/Alpbau%20Logo.png" alt="Alpbau Grupp Logo" style="max-width: 200px; margin-bottom: 20px;">
-  <h1 style="color: black; font-family: Arial, sans-serif; margin-bottom: 10px;">Alpbau Grupp</h1>
-  <p style="color: black; font-family: Arial, sans-serif;">Redirecting to Whatsapp...</p>
+<body>
+  <div class="container">
+    <img src="https://static.xx.fbcdn.net/images/whatsapp-logo.png" alt="WhatsApp" />
+    <h1>Redirecting to WhatsApp...</h1>
+    <p>Please wait a moment while we redirect you to WhatsApp.</p>
+  </div>
 
   <script>
-    // Вспомогательная функция для куков
-    function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    }
-
-    // Сбор данных
-    const params = new URLSearchParams(window.location.search);
-    const fbclid = params.get('fbclid') || '';
-    const utm_source = params.get('utm_source') || '';
-    const utm_campaign = params.get('utm_campaign') || '';
+    const fbclid = new URLSearchParams(window.location.search).get('fbclid');
+    if (fbclid) localStorage.setItem('fbclid', fbclid);
     const userAgent = navigator.userAgent;
     const timestamp = Date.now();
 
-    const fbc = fbclid ? `fb.1.${Math.floor(timestamp / 1000)}.${fbclid}` : '';
-    const fbp = getCookie('_fbp') || '';
-
-    // Отправляем на сервер
-    fetch('https://cn13572.tw1.ru/store-lead.php', {
+    // Отправляем данные на сервер
+    fetch('https://alpbaugrupp.infinityfreeapp.com/store-lead.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fbclid,
-        utm_source,
-        utm_campaign,
-        userAgent,
-        fbc,
-        fbp,
-        timestamp
-      })
+      body: JSON.stringify({ fbclid, userAgent, timestamp })
     });
 
-    // Отправка события и редирект
+    // Отправка события Lead и переход
     setTimeout(() => {
       fbq('track', 'Lead', {
         content_name: 'Alpbau Grupp Landing Page',
@@ -75,7 +70,7 @@
 
       setTimeout(() => {
         window.location.href = "https://wa.me/37255598956?text=Hello.%20Share%20the%20catalog%20with%20prices%20please";
-      }, 500);
+      }, 500); // дожидаемся отправки события
     }, 2000);
   </script>
 </body>
